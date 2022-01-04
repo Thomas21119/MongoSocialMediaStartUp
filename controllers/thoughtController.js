@@ -27,7 +27,7 @@ const ThoughtController = {
       });
   },
   addThought(req, res) {
-    Thought.create(req.params.thoughtText)
+    Thought.create(req.body)
       .then(({ _id }) => {
         return User.findOneAndUpdate(
           { _id: req.params.userId },
@@ -45,29 +45,33 @@ const ThoughtController = {
       });
   },
   removeThought(req, res) {
-    Thought.findOneAndDelete({ _id: req.params.thoughtId })
+    Thought.findOneAndRemove({ _id: req.params.thoughtId })
       .then((deletedThought) => {
         if (!deletedThought) {
           return res.status(404).json({ message: 'no thought with this id' });
         } else {
           return User.findOneAndUpdate(
-            { _id: req.params.username },
-            { $pull: { thoughts: params.thoughtId } },
+            { thoughts: req.params.thoughtId },
+            { $pull: { thoughts: req.params.thoughtId } },
             { new: true }
           );
         }
       })
       .then((userData) => {
+        if (!userData) {
+          return res.status(404).json({ message: 'no Thoughts detected' });
+        }
         res.status(200).json(userData);
       })
       .catch((err) => {
+        console.log(err);
         res.status(500).json(err);
       });
   },
   addReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
-      { $push: { thoughtText } },
+      { $push: { reactions: req.body } },
       { new: true }
     )
       .then((userData) => {
@@ -85,17 +89,19 @@ const ThoughtController = {
   removeReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
-      { $pull: { reactions: req.params.reactionId } },
-      { new: true }
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { runValidators: true, new: true }
     )
-      .then((userData) => {
-        if (!userData) {
-          res.status(404).json({ message: 'no user found with that id' });
-        } else {
-          res.status(200).json(userData);
+      .then((data) => {
+        if (!data) {
+          return res
+            .status(404)
+            .json({ message: 'no user found with that id' });
         }
+        res.json(data);
       })
       .catch((err) => {
+        console.log(err);
         res.status(500).json(err);
       });
   },
