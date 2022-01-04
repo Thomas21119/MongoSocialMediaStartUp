@@ -34,8 +34,7 @@ const thoughtSchema = new Schema(
     thoughtText: {
       type: String,
       required: 'Please enter a thought between 1 and 280 characters',
-      minlength: 1,
-      maxlength: 280,
+      // maxlength: 280,
     },
     createdAt: {
       type: Date,
@@ -61,9 +60,9 @@ const thoughtSchema = new Schema(
   }
 );
 
-thoughtSchema.virtual('reactionCount').get(function () {
-  return this.reactions.length;
-});
+// thoughtSchema.virtual('reactionCount').get(function () {
+//   return this.reactions.length;
+// });
 
 const Thought = model('Thought', thoughtSchema);
 
