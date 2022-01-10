@@ -90,7 +90,7 @@ const userController = {
   addFriend(req, res) {
     User.findByIdAndUpdate(
       { _id: req.params.id },
-      { $addToSet: { friends: req.params.friends } },
+      { $push: { friends: req.params.friends } },
       { new: true }
     )
       .then((userData) => {
