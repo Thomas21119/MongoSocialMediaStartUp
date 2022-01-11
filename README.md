@@ -19,3 +19,9 @@ To test and run the project you can run insomnia and use the get post put and de
 ### Licence
 
 This project is under the MIT license
+
+### Walkthrough Links
+
+https://www.youtube.com/watch?v=SIy8MvX098c <br>
+https://www.youtube.com/watch?v=wHghYzCiUyc <br>
+https://www.youtube.com/watch?v=xDmJjxr-CCc <br>
