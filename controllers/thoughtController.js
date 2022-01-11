@@ -75,24 +75,15 @@ const ThoughtController = {
         res.status(500).json(err);
       });
   },
-  removeReaction(req, res) {
+
+  removeReaction({ params }, res) {
     Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $pull: { reactions: { reactionId: req.params.reactionId } } },
-      { runValidators: true, new: true }
+      { _id: params.thoughtId },
+      { $pull: { reactions: { reactionId: params.reactionId } } },
+      { new: true }
     )
-      .then((data) => {
-        if (!data) {
-          return res
-            .status(404)
-            .json({ message: 'no user found with that id' });
-        }
-        res.json(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
+      .then((dbUserData) => res.json(dbUserData))
+      .catch((err) => res.json(err));
   },
 };
 
